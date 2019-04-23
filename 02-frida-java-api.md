@@ -39,7 +39,7 @@ With these, we can start enumerating the classes from our android app.
 
 ## Example
 
-### Enumerating classes
+### Enumerating classes being loaded on runtime.
 
 *enumclasses.js*
 ```javascript
@@ -90,4 +90,9 @@ org.apache.commons.logg......
 ....
 ```
 Awesome! We can access class names. With this, we can start building on more actions we would like to take with the class name.
+
+Note that the classes dumped are classes accessible by class loader during runtime.
+Java uses lazy class loading which means that classes are only loaded when first encountered.
+Hence, if an activity does not get executed, classes that are not yet encountered will not be dumped.
+
 
