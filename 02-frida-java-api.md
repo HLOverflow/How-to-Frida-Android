@@ -95,4 +95,47 @@ Note that the classes dumped are classes accessible by class loader during runti
 Java uses lazy class loading which means that classes are only loaded when first encountered.
 Hence, if an activity does not get executed, classes that are not yet encountered will not be dumped.
 
+## Changing a class's method implementation
+
+Supposed there is a method from a package ( `com.scottyab.rootbeer`) that check if a phone has been rooted using a method call ( `RootBeer.isRooted()` ).
+
+Main idea:
+1. We can access the class directly using its full name obtained by decompiling the apk.
+2. Modify the implementation.
+3. Trigger the correct Activity and appropriate sequence of actions to reach the code we are targetting --> the invocation will run our implementation instead of the actual compiled byte code.
+( See others.md for starting hidden activities )
+
+*BypassRoot.js*
+```javascript
+Java.perform(function(){
+	//The Java "use" helps us load the class into memory --> return a javascript wrapper of the class.
+	//we can access methods using dot notation and overwrite its implementation.
+	var RootBeer = Java.use("com.scottyab.rootbeer.RootBeer");
+	RootBeer.isRooted.implementation = function(){
+		console.log("RootBeer isRooted returns false");
+		return false;
+	}
+
+});
+```
+Basically, we are overwriting the method isRooted() to always return false.
+
+```sh
+-> % frida -U -p 6713 -l bypassrootcheck.js --no-pause 
+     ____
+    / _  |   Frida 12.4.8 - A world-class dynamic instrumentation toolkit
+   | (_| |
+    > _  |   Commands:
+   /_/ |_|       help      -> Displays the help system
+   . . . .       object?   -> Display information about 'object'
+   . . . .       exit/quit -> Exit
+   . . . .
+   . . . .   More info at http://www.frida.re/docs/home/
+                                                                                
+[Genymotion APP-PT8.0::PID::6713]-> RootBeer isRooted returns false
+RootBeer isRooted returns false
+[Genymotion APP-PT8.0::PID::6713]->
+```
+The app Activity was started and frida was used to hook onto the specific running process via pid.
+After performing the action that trigger the root check, we see that our console printed out "RootBeer isRooted returns false".
 
