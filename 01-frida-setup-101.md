@@ -61,8 +61,6 @@ frida-server-12.4.8-android-x86: 1 file pushed. 79.4 MB/s (32873600 bytes in 0.3
 
 ```sh
 vbox86p:/tmp # chmod +x frida-server-12.4.8-android-x86
-vbox86p:/tmp # ./fri
-frida-server                          frida-server-12.4.8-android-x86
 vbox86p:/tmp # ./frida-server-12.4.8-android-x86 -l 0.0.0.0 -D
 vbox86p:/tmp # ps -A | grep frida
 root          4186     1   97064  56356 poll_schedule_timeout e85e1ba9 S frida-server-12.4.8-android-x86
